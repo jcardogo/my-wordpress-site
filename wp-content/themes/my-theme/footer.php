@@ -21,3 +21,4 @@ esc_html__( 'Proudly powered by %s.', 'my-theme' ),
 <?php wp_footer(); ?>
 </body>
 </html>
+
