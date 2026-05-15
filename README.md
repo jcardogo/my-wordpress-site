@@ -22,6 +22,7 @@ The theme provides:
 - Featured image support for posts
 - Accessible skip link and focus styles
 - Clean footer with dynamic year and site name
+- Student class booking and booking tracking forms integrated with a Python API
 
 ## Tech Stack
 
@@ -37,6 +38,8 @@ The theme provides:
 - wp-content/themes/my-theme/header.php: Global site header and menu output
 - wp-content/themes/my-theme/index.php: Homepage template and post loop
 - wp-content/themes/my-theme/footer.php: Global footer markup
+- python-booking-service/: Flask API for student booking/tracking with MSSQL
+- python-booking-service/sql/: SQL Server schema and class seed scripts
 
 ## Local Development
 
@@ -60,6 +63,7 @@ For shared hosting (such as Hostinger):
 
 - The current codebase is intentionally lightweight and does not include build tooling.
 - This project can be extended with custom templates, customizer options, and Gutenberg block styles.
+- For booking and tracking to work, start the Python service and SQL Server database described in python-booking-service/README.md.
 
 ## Author
 
