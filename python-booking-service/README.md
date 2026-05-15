@@ -8,6 +8,7 @@ This service provides student class booking and tracking endpoints for the WordP
 - Create a booking per student and class
 - Track bookings by student email
 - Update booking status (booked, attended, cancelled)
+- Admin UI to create students, class sessions, and attendance logs
 
 ## Requirements
 
@@ -26,6 +27,7 @@ This service provides student class booking and tracking endpoints for the WordP
 4. Run SQL scripts in order:
    - `sql/01_schema.sql`
    - `sql/02_seed_classes.sql`
+   - `sql/03_sessions_and_attendance.sql`
 5. Start API:
    - `python app.py`
 
@@ -40,6 +42,14 @@ Default API base URL:
 - `POST /api/bookings`
 - `GET /api/students/{email}/bookings`
 - `PATCH /api/bookings/{tracking_id}/status`
+
+## Admin UI
+
+- Open `http://127.0.0.1:5000/admin`
+- Actions available:
+   - Create student records
+   - Create class sessions linked to classes
+   - Log attendance for students on class sessions
 
 ## Sample Request: Create Booking
 

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}" />
+</head>
+<body>
+    <main class="admin-shell">
+        <header class="admin-header">
+            <h1>Student Booking Admin</h1>
+            <p>Create students, create class sessions, and log attendance.</p>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <section class="alerts" aria-label="Messages">
+                    {% for category, message in messages %}
+                        <p class="alert alert--{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        <section class="grid two-col" aria-label="Create records">
+            <article class="panel">
+                <h2>Create Student</h2>
+                <form method="post" action="{{ url_for('admin_create_student') }}" class="form-grid">
+                    <label for="full_name">Full Name</label>
+                    <input id="full_name" name="full_name" type="text" required />
+
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" required />
+
+                    <button type="submit">Save Student</button>
+                </form>
+            </article>
+
+            <article class="panel">
+                <h2>Create Class Session</h2>
+                <form method="post" action="{{ url_for('admin_create_session') }}" class="form-grid">
+                    <label for="class_id">Class</label>
+                    <select id="class_id" name="class_id" required>
+                        <option value="">Select class</option>
+                        {% for c in classes %}
+                            <option value="{{ c.id }}">{{ c.name }} ({{ c.code }})</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="session_title">Session Title</label>
+                    <input id="session_title" name="session_title" type="text" placeholder="Session 1" required />
+
+                    <label for="session_date">Session Date</label>
+                    <input id="session_date" name="session_date" type="date" required />
+
+                    <label for="start_time">Start Time</label>
+                    <input id="start_time" name="start_time" type="time" />
+
+                    <label for="end_time">End Time</label>
+                    <input id="end_time" name="end_time" type="time" />
+
+                    <label for="location">Location</label>
+                    <input id="location" name="location" type="text" placeholder="Room A" />
+
+                    <button type="submit">Save Session</button>
+                </form>
+            </article>
+        </section>
+
+        <section class="grid one-col" aria-label="Attendance logging">
+            <article class="panel">
+                <h2>Log Attendance</h2>
+                <form method="post" action="{{ url_for('admin_log_attendance') }}" class="form-grid">
+                    <label for="student_id">Student</label>
+                    <select id="student_id" name="student_id" required>
+                        <option value="">Select student</option>
+                        {% for s in students %}
+                            <option value="{{ s.id }}">{{ s.full_name }} ({{ s.email }})</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="session_id">Session</label>
+                    <select id="session_id" name="session_id" required>
+                        <option value="">Select session</option>
+                        {% for ss in sessions %}
+                            <option value="{{ ss.id }}">{{ ss.class_name }} - {{ ss.session_title }} ({{ ss.session_date }})</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="attendance_status">Status</label>
+                    <select id="attendance_status" name="attendance_status" required>
+                        {% for status in attendance_statuses %}
+                            <option value="{{ status }}">{{ status|capitalize }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Optional note"></textarea>
+
+                    <button type="submit">Save Attendance</button>
+                </form>
+            </article>
+        </section>
+
+        <section class="grid two-col" aria-label="Current records">
+            <article class="panel">
+                <h2>Students</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in students %}
+                                <tr>
+                                    <td>{{ s.full_name }}</td>
+                                    <td>{{ s.email }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="2">No students yet.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="panel">
+                <h2>Class Sessions</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Session</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ss in sessions %}
+                                <tr>
+                                    <td>{{ ss.class_name }}</td>
+                                    <td>{{ ss.session_title }}</td>
+                                    <td>{{ ss.session_date }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3">No sessions yet.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+
+        <section class="grid one-col" aria-label="Attendance history">
+            <article class="panel">
+                <h2>Attendance History</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Class</th>
+                                <th>Session</th>
+                                <th>Status</th>
+                                <th>Marked At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in attendance %}
+                                <tr>
+                                    <td>{{ a.full_name }}</td>
+                                    <td>{{ a.class_name }}</td>
+                                    <td>{{ a.session_title }} ({{ a.session_date }})</td>
+                                    <td>{{ a.attendance_status }}</td>
+                                    <td>{{ a.marked_at }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5">No attendance logs yet.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,159 @@
+:root {
+    --bg: #f2f5f9;
+    --panel: #ffffff;
+    --text: #17202a;
+    --muted: #5b6b7b;
+    --line: #d9e2ec;
+    --accent: #0f6ab7;
+    --accent-dark: #0b5695;
+    --ok-bg: #d1e7dd;
+    --ok-text: #0f5132;
+    --err-bg: #f8d7da;
+    --err-text: #842029;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef2f8 100%);
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-shell {
+    width: min(1200px, 94%);
+    margin: 1.5rem auto 2.5rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.admin-header {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+}
+
+.admin-header h1 {
+    margin: 0;
+}
+
+.admin-header p {
+    margin: 0.4rem 0 0;
+    color: var(--muted);
+}
+
+.grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.two-col {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+}
+
+.one-col {
+    grid-template-columns: 1fr;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.panel h2 {
+    margin-top: 0;
+}
+
+.form-grid {
+    display: grid;
+    gap: 0.65rem;
+}
+
+label {
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.58rem 0.7rem;
+    color: var(--text);
+    background: #fff;
+}
+
+button {
+    margin-top: 0.25rem;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.62rem 1.1rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--accent-dark);
+}
+
+.alerts {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.alert {
+    margin: 0;
+    border-radius: 8px;
+    padding: 0.62rem 0.78rem;
+    font-size: 0.92rem;
+}
+
+.alert--success {
+    background: var(--ok-bg);
+    color: var(--ok-text);
+}
+
+.alert--error {
+    background: var(--err-bg);
+    color: var(--err-text);
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+th,
+td {
+    border-bottom: 1px solid var(--line);
+    padding: 0.55rem 0.45rem;
+    text-align: left;
+}
+
+th {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+
+@media (max-width: 860px) {
+    .two-col {
+        grid-template-columns: 1fr;
+    }
+}
