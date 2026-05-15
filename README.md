@@ -1,70 +1,127 @@
 # My WordPress Site
 
-This repository contains the custom WordPress theme used for my personal website. It was originally created as an early hands-on project using GitHub Copilot and is intended to power a clean, modern content-focused site.
+This repository contains a custom WordPress theme and a Python backend service that together provide:
 
-## Project Scope
+- A content-focused homepage for posts
+- Student class booking
+- Booking tracking by student email
+- Admin management for students, class sessions, and attendance logs
 
-This repository stores only the theme code (not a full WordPress installation).
+## Current Status
 
-Included path:
+Implemented and working in code:
 
-- wp-content/themes/my-theme
+- WordPress theme with homepage hero and responsive post cards
+- Booking form on homepage that submits student + class booking to Python API
+- Tracking form on homepage that fetches booking history for a student
+- Python Flask API integrated with Microsoft SQL Server (MSSQL)
+- Admin UI for operational tasks:
+	- Create student records
+	- Create class sessions
+	- Log and update attendance for students on sessions
 
-## Theme Summary
+## Architecture
 
-Theme name: My Theme
+1. Frontend
+- WordPress theme in wp-content/themes/my-theme
+- Forms are handled through WordPress admin-post actions
 
-The theme provides:
+2. Backend
+- Flask service in python-booking-service
+- REST API endpoints for classes, bookings, tracking, and booking status updates
 
-- A responsive homepage with a hero section
-- Card-based post grid layout
-- Sticky dark header and primary navigation menu
-- Featured image support for posts
-- Accessible skip link and focus styles
-- Clean footer with dynamic year and site name
-- Student class booking and booking tracking forms integrated with a Python API
+3. Database
+- MSSQL schema for:
+	- students
+	- classes
+	- bookings
+	- class_sessions
+	- attendance_logs
+
+## Repository Structure
+
+- README.md: Project overview and setup
+- wp-content/themes/my-theme: WordPress theme files
+- python-booking-service/app.py: Flask API and admin routes
+- python-booking-service/templates/admin.html: Admin screen template
+- python-booking-service/static/admin.css: Admin screen styling
+- python-booking-service/sql/01_schema.sql: Core tables (students, classes, bookings)
+- python-booking-service/sql/02_seed_classes.sql: Seed data for offered classes
+- python-booking-service/sql/03_sessions_and_attendance.sql: Session and attendance tables
+- python-booking-service/.env.example: Environment variables template
+- python-booking-service/requirements.txt: Python dependencies
+
+## Features Offered
+
+1. Public Site Features
+- Responsive hero and post grid layout
+- Student class booking form
+- Student booking tracking form
+
+2. Admin Features
+- Student creation
+- Class session creation linked to classes
+- Attendance logging with statuses:
+	- present
+	- absent
+	- late
+	- excused
+
+3. API Features
+- Health check
+- List active classes
+- Create booking
+- Track bookings by student email
+- Update booking status
+
+## End-to-End Local Setup
+
+1. Prepare WordPress
+- Install WordPress locally
+- Copy wp-content/themes/my-theme into your WordPress installation
+- Activate My Theme in Appearance > Themes
+
+2. Prepare MSSQL
+- Create SQL Server database and tables by running:
+	- python-booking-service/sql/01_schema.sql
+	- python-booking-service/sql/02_seed_classes.sql
+	- python-booking-service/sql/03_sessions_and_attendance.sql
+
+3. Prepare Python Service
+- Go to python-booking-service
+- Copy .env.example to .env and set SQL Server credentials
+- Create a virtual environment and install dependencies from requirements.txt
+- Start the app with python app.py
+
+4. Access UIs
+- WordPress public forms: site homepage
+- Python admin UI: http://127.0.0.1:5000/admin
+
+## API Summary
+
+- GET /api/health
+- GET /api/classes
+- POST /api/bookings
+- GET /api/students/{email}/bookings
+- PATCH /api/bookings/{tracking_id}/status
+
+## Integration Notes
+
+- WordPress API base URL defaults to http://127.0.0.1:5000/api
+- You can override it via the WordPress filter my_theme_booking_api_base_url in theme logic
 
 ## Tech Stack
 
 - WordPress 6.x
 - PHP 7.4+
-- Vanilla CSS (custom properties and responsive media queries)
+- Python 3.10+
+- Flask
+- Microsoft SQL Server (MSSQL)
+- pyodbc + ODBC Driver 18 for SQL Server
 
-## Repository Structure
+## Next Improvements (Optional)
 
-- README.md: Project documentation
-- wp-content/themes/my-theme/style.css: Theme metadata and all visual styles
-- wp-content/themes/my-theme/functions.php: Theme setup and asset loading
-- wp-content/themes/my-theme/header.php: Global site header and menu output
-- wp-content/themes/my-theme/index.php: Homepage template and post loop
-- wp-content/themes/my-theme/footer.php: Global footer markup
-- python-booking-service/: Flask API for student booking/tracking with MSSQL
-- python-booking-service/sql/: SQL Server schema and class seed scripts
-
-## Local Development
-
-1. Install WordPress locally (for example with Local, XAMPP, or Docker).
-2. Copy the my-theme folder into your local WordPress installation under wp-content/themes/.
-3. In the WordPress admin area, go to Appearance > Themes.
-4. Activate My Theme.
-5. Set Site Title and Tagline in Settings > General to populate the hero text.
-6. Create or assign a menu to the Primary Menu location in Appearance > Menus.
-7. Add posts and featured images to see the homepage card grid.
-
-## Deployment
-
-For shared hosting (such as Hostinger):
-
-1. Upload the my-theme folder to wp-content/themes/ on the server.
-2. Activate the theme from the WordPress admin panel.
-3. Verify homepage rendering, navigation, and responsive behavior on mobile.
-
-## Notes
-
-- The current codebase is intentionally lightweight and does not include build tooling.
-- This project can be extended with custom templates, customizer options, and Gutenberg block styles.
-- For booking and tracking to work, start the Python service and SQL Server database described in python-booking-service/README.md.
-
-## Author
-
-Maintained by the repository owner.
+- Add authentication for Python admin UI
+- Add edit/delete operations for students, sessions, and attendance rows
+- Add pagination/filtering in admin tables
+- Add deployment scripts for production environments
